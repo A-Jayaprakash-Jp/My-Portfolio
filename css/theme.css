@@ -1,0 +1,92 @@
+/* Theme Variables */
+/* Updated theme.css */
+:root {
+    --bg-color: #f5f7fa; /* Changed from pure white to softer color */
+    --text-color: #333333;
+    --primary-color: #6c63ff;
+    --secondary-color: #4d44db;
+    --card-bg: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --section-bg: rgba(255, 255, 255, 0.7); /* More transparent */
+    --navbar-bg: rgba(245, 247, 250, 0.95); /* Matching new bg color */
+    --footer-bg: #16213e;
+    --particle-color: #6c63ff;
+}
+
+[data-theme="dark"] {
+    --bg-color: #0f0f1a;
+    --text-color: #f0f0f0;
+    --primary-color: #7f78d2;
+    --secondary-color: #6c63ff;
+    --card-bg: rgba(26, 26, 46, 0.9); /* Semi-transparent dark */
+    --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    --section-bg: rgba(22, 33, 62, 0.7); /* More transparent */
+    --navbar-bg: rgba(15, 15, 26, 0.95);
+    --footer-bg: #0f0f1a;
+    --particle-color: #7f78d2;
+}
+
+/* Rest of the file remains the same... */
+/* Theme Transition */
+body {
+    transition: background-color 0.5s ease, color cubic-bezier(1, 0, 0, 1) ease;
+}
+
+/* Dark Mode Specific Styles */
+[data-theme="dark"] {
+    /* About section */
+    .about {
+        background-color: rgba(30, 30, 46, 0.9);
+    }
+    
+    /* Contact section */
+    .contact-container {
+        background-color: #1a1a2e;
+        color: white;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        background-color: #2d2d39;
+        color: white;
+        border-color: #444;
+    }
+    
+    .contact-item i {
+        background: linear-gradient(45deg, #4d44db, #6c63ff);
+    }
+    
+    /* Project modals */
+    .modal-content {
+        background-color: #1a1a2e;
+        color: white;
+    }
+    
+    /* Timeline items */
+    .timeline-item {
+        background-color: #1a1a2e;
+        color: white;
+    }
+    
+    /* Education items */
+    .education-item {
+        background-color: #1a1a2e;
+        color: white;
+    }
+    
+    /* Footer links */
+    .footer-links a {
+        color: #f0f0f0;
+    }
+    
+    /* Skill items */
+    .skill-item {
+        background-color: rgba(108, 99, 255, 0.1);
+    }
+    
+    /* Project items */
+    .project-info {
+        background-color: #1a1a2e;
+    }
+}
+

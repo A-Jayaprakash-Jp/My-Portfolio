@@ -1,0 +1,31 @@
+
+    {
+        "personalInfo": {
+            "name": "JAYAPRAKASH A",
+            "title": "Machine Learning & Full-Stack Specialist",
+            "description": "Passionate technologist with expertise in AI/ML, robotics, and full-stack development. Combining cutting-edge AI with robust web solutions to create intelligent systems and beautiful user experiences.",
+            "email": "ajayaprakashjp21@gmail.com",
+            "phone": "+91 6369663155",
+            "location": "Coimbatore, Tamilnadu, India",
+            "degree": "B.Tech in Artificial Intelligence & Data Science"
+        },
+        "experience": [
+            {
+                "position": "Position Title",
+                "company": "Company Name",
+                "logo": "path/to/logo.png",
+                "date": "June 2010 - May 2024",
+                "description": "Description of your role and responsibilities."
+            }
+        ],
+        "education": [
+            {
+                "degree": "Bachelor of Technology - AI & DS",
+                "institution": "Sri Krishna College Of Engineering And Technology",
+                "logo": "path/to/logo.png",
+                "date": "Aug 2024 - May 2028",
+                "grade": "8.87 CGPA",
+                "description": "Description of your education."
+            }
+        ]
+    }

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1, h2, h3 {
+            color: #6c63ff;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="file"]:focus,
+        textarea:focus {
+            border-color: #6c63ff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #6c63ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background-color: #4d44db;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .edit-item {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+
+        .edit-item h3 {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.error {
+            background-color: #dc3545;
+        }
+
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 10px;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .image-upload-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .image-upload-container img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
+
+        .image-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Edit Portfolio</h1>
+        <div id="toast" class="toast"></div>
+
+        <div class="section">
+            <h2>Personal Information</h2>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="edit-name" placeholder="Your Name">
+            </div>
+            <div class="form-group">
+                <label>Professional Title</label>
+                <input type="text" id="edit-title" placeholder="e.g. Machine Learning Specialist">
+            </div>
+            <div class="form-group">
+                <label>About Description</label>
+                <textarea id="edit-description" placeholder="Write a short description about yourself"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="edit-email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="edit-phone" placeholder="+1 (555) 123-4567">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="edit-location" placeholder="City, Country">
+                </div>
+                <div class="form-group">
+                    <label>Degree</label>
+                    <input type="text" id="edit-degree" placeholder="e.g. B.S. in Computer Science">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Update Resume</h2>
+            <div class="form-group">
+                <label>Upload New Resume (PDF only)</label>
+                <input type="file" id="resume-upload" accept=".pdf">
+            </div>
+            <div class="form-group">
+                <label>Current Resume:</label>
+                <span id="current-resume">No resume uploaded</span>
+            </div>
+            <button id="update-resume" class="btn">
+                <i class="fas fa-upload"></i> Update Resume
+            </button>
+        </div>
+
+        <div class="section">
+            <h2>Projects</h2>
+            <div id="edit-projects">
+                <!-- Projects will be loaded here -->
+            </div>
+            <button id="add-project" class="btn">Add New Project</button>
+        </div>
+
+        <div class="section">
+            <h2>Work Experience</h2>
+            <div id="edit-experience">
+                <!-- Experience will be loaded here -->
+            </div>
+            <button id="add-experience" class="btn">Add New Experience</button>
+        </div>
+
+        <div class="section">
+            <h2>Education</h2>
+            <div id="edit-education">
+                <!-- Education will be loaded here -->
+            </div>
+            <button id="add-education" class="btn">Add New Education</button>
+        </div>
+        
+        <div class="section">
+            <div class="button-group">
+                <button id="save-changes" class="btn">
+                    <i class="fas fa-save"></i> Save All Changes
+                </button>
+                <button id="reset-changes" class="btn btn-danger">
+                    <i class="fas fa-undo"></i> Reset
+                </button>
+                <a href="../index.html" class="btn btn-secondary" id="view-portfolio">
+                    <i class="fas fa-eye"></i> View Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store uploaded images temporarily
+        const uploadedImages = {
+            projects: {},
+            experience: {},
+            education: {}
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Two-step verification
+            const step1 = prompt('Please enter first verification password:');
+            if (step1 !== "admin123") {
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            const step2 = prompt('Please enter second verification password:');
+            if (step2 !== "secure456") {
+                window.location.href = '../index.html';
+                return;
+            }
+
+            // Load current data for editing
+            loadDataForEditing();
+            setupEventListeners();
+        });
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = isError ? 'toast error show' : 'toast show';
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function loadDataForEditing() {
+            // Try to load from localStorage first
+            let portfolioData = localStorage.getItem('portfolioData');
+
+            if (portfolioData) {
+                portfolioData = JSON.parse(portfolioData);
+                populateForm(portfolioData);
+            } else {
+                // Load from default JSON file
+                fetch('../data/portfolio.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        populateForm(data);
+                    })
+                    .catch(error => {
+                        console.error('Error loading portfolio data:', error);
+                        showToast('Error loading portfolio data', true);
+                    });
+            }
+        }
+
+        function populateForm(data) {
+            // Personal Info
+            document.getElementById('edit-name').value = data.personalInfo.name || '';
+            document.getElementById('edit-title').value = data.personalInfo.title || '';
+            document.getElementById('edit-description').value = data.personalInfo.description || '';
+            document.getElementById('edit-email').value = data.personalInfo.email || '';
+            document.getElementById('edit-phone').value = data.personalInfo.phone || '';
+            document.getElementById('edit-location').value = data.personalInfo.location || '';
+            document.getElementById('edit-degree').value = data.personalInfo.degree || '';
+
+             // Projects
+            const projectsContainer = document.getElementById('edit-projects');
+            projectsContainer.innerHTML = '';
+            data.projects?.forEach((project, index) => {
+                addProjectToForm(project, index);
+            });
+
+            // Experience
+            const experienceContainer = document.getElementById('edit-experience');
+            experienceContainer.innerHTML = '';
+            data.experience?.forEach((exp, index) => {
+                addExperienceToForm(exp, index);
+            });
+
+            // Education
+            const educationContainer = document.getElementById('edit-education');
+            educationContainer.innerHTML = '';
+            data.education?.forEach((edu, index) => {
+                addEducationToForm(edu, index);
+            });
+
+            // Resume
+            const currentResume = localStorage.getItem('portfolioResume');
+            if (currentResume) {
+                document.getElementById('current-resume').textContent = 'Resume.pdf (uploaded)';
+            }
+        }
+
+        function addProjectToForm(project = {}, index) {
+            const container = document.getElementById('edit-projects');
+            const projectDiv = document.createElement('div');
+            projectDiv.className = 'edit-item';
+            projectDiv.dataset.index = index;
+            projectDiv.dataset.type = 'projects'; // Add this line
+            projectDiv.innerHTML = `
+                <h3>Project ${index + 1} <button class="btn btn-danger remove-item" data-type="projects" data-index="${index}">Remove</button></h3>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" value="${project.title || ''}" data-field="title" data-index="${index}">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea data-field="description" data-index="${index}">${project.description || ''}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Short Description</label>
+                    <input type="text" value="${project.shortDescription || ''}" data-field="shortDescription" data-index="${index}">
+                </div>
+                <div class="form-group">
+                    <label>Project Image</label>
+                    <input type="file" data-field="image" data-index="${index}" accept="image/*" class="image-upload">
+                    <div class="image-upload-container">
+                        ${project.image ? `
+                            <img src="${project.image}" class="preview-image" id="project-image-preview-${index}">
+                            <div class="image-actions">
+                                <button type="button" class="btn btn-secondary save-image-btn" data-type="projects" data-index="${index}">
+                                    <i class="fas fa-save"></i> Save Image
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Demo URL</label>
+                        <input type="text" value="${project.links?.demo || ''}" data-field="demo" data-index="${index}">
+                    </div>
+                    <div class="form-group">
+                        <label>Code URL</label>
+                        <input type="text" value="${project.links?.code || ''}" data-field="code" data-index="${index}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" value="${project.tags ? project.tags.join(', ') : ''}" data-field="tags" data-index="${index}">
+                </div>
+            `;
+            container.appendChild(projectDiv);
+        }
+
+        function addExperienceToForm(exp = {}, index) {
+            const container = document.getElementById('edit-experience');
+            const expDiv = document.createElement('div');
+            expDiv.className = 'edit-item';
+            expDiv.dataset.index = index;
+            expDiv.dataset.type = 'experience'; // Add this line
+            expDiv.innerHTML = `
+                <h3>Experience ${index + 1} <button class="btn btn-danger remove-item" data-type="experience" data-index="${index}">Remove</button></h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="text" value="${exp.position || ''}" data-field="position" data-index="${index}">
+                    </div>
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" value="${exp.company || ''}" data-field="company" data-index="${index}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Company Logo</label>
+                    <input type="file" data-field="logo" data-index="${index}" accept="image/*" class="image-upload">
+                    <div class="image-upload-container">
+                        ${exp.logo ? `
+                            <img src="${exp.logo}" class="preview-image" id="experience-logo-preview-${index}">
+                            <div class="image-actions">
+                                <button type="button" class="btn btn-secondary save-image-btn" data-type="experience" data-index="${index}">
+                                    <i class="fas fa-save"></i> Save Image
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="text" value="${exp.date || ''}" data-field="date" data-index="${index}">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea data-field="description" data-index="${index}">${exp.description || ''}</textarea>
+                </div>
+            `;
+            container.appendChild(expDiv);
+        }
+
+        function addEducationToForm(edu = {}, index) {
+            const container = document.getElementById('edit-education');
+            const eduDiv = document.createElement('div');
+            eduDiv.className = 'edit-item';
+            eduDiv.dataset.index = index;
+            eduDiv.dataset.type = 'education'; // Add this line
+            eduDiv.innerHTML = `
+                <h3>Education ${index + 1} <button class="btn btn-danger remove-item" data-type="education" data-index="${index}">Remove</button></h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Degree</label>
+                        <input type="text" value="${edu.degree || ''}" data-field="degree" data-index="${index}">
+                    </div>
+                    <div class="form-group">
+                        <label>Institution</label>
+                        <input type="text" value="${edu.institution || ''}" data-field="institution" data-index="${index}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Institution Logo</label>
+                    <input type="file" data-field="logo" data-index="${index}" accept="image/*" class="image-upload">
+                    <div class="image-upload-container">
+                        ${edu.logo ? `
+                            <img src="${edu.logo}" class="preview-image" id="education-logo-preview-${index}">
+                            <div class="image-actions">
+                                <button type="button" class="btn btn-secondary save-image-btn" data-type="education" data-index="${index}">
+                                    <i class="fas fa-save"></i> Save Image
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="text" value="${edu.date || ''}" data-field="date" data-index="${index}">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea data-field="description" data-index="${index}">${edu.description || ''}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Grade</label>
+                    <input type="text" value="${edu.grade || ''}" data-field="grade" data-index="${index}">
+                </div>
+            `;
+            container.appendChild(eduDiv);
+        }
+
+
+        function setupEventListeners() {
+            // Add project button
+            document.getElementById('add-project').addEventListener('click', function() {
+                const projects = document.querySelectorAll('#edit-projects .edit-item');
+                addProjectToForm({}, projects.length);
+            });
+
+            // Add experience button
+            document.getElementById('add-experience').addEventListener('click', function() {
+                const experiences = document.querySelectorAll('#edit-experience .edit-item');
+                addExperienceToForm({}, experiences.length);
+            });
+
+            // Add education button
+            document.getElementById('add-education').addEventListener('click', function() {
+                const educations = document.querySelectorAll('#edit-education .edit-item');
+                addEducationToForm({}, educations.length);
+            });
+
+            document.addEventListener('change', function(e) {
+                if (e.target?.classList.contains('image-upload')) {
+                    const index = e.target.dataset.index;
+                    const type = e.target.closest('.edit-item').dataset.type;
+                    const file = e.target.files[0];
+                    
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            uploadedImages[type][index] = event.target.result;
+                            
+                            let previewContainer = e.target.nextElementSibling;
+                            if (!previewContainer?.classList.contains('image-upload-container')) {
+                                previewContainer = document.createElement('div');
+                                previewContainer.className = 'image-upload-container';
+                                e.target.parentNode.appendChild(previewContainer);
+                            }
+                            
+                            let preview = previewContainer.querySelector('img');
+                            if (!preview) {
+                                preview = document.createElement('img');
+                                preview.className = 'preview-image';
+                                preview.id = `${type}-logo-preview-${index}`;
+                                previewContainer.prepend(preview);
+                            }
+                            
+                            preview.src = event.target.result;
+                            
+                            if (!previewContainer.querySelector('.save-image-btn')) {
+                                const saveBtn = document.createElement('button');
+                                saveBtn.type = 'button';
+                                saveBtn.className = 'btn btn-secondary save-image-btn';
+                                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Image';
+                                saveBtn.dataset.type = type;
+                                saveBtn.dataset.index = index;
+                                
+                                const actionsDiv = document.createElement('div');
+                                actionsDiv.className = 'image-actions';
+                                actionsDiv.appendChild(saveBtn);
+                                previewContainer.appendChild(actionsDiv);
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+
+            // Save individual image buttons
+            document.addEventListener('change', function(e) {
+                if (e.target && e.target.classList.contains('image-upload')) {
+                    const index = e.target.getAttribute('data-index');
+                    const container = e.target.closest('.edit-item');
+                    const type = container.getAttribute('data-type');
+                    const file = e.target.files[0];
+                    
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            // Store the image data temporarily
+                            uploadedImages[type][index] = event.target.result;
+                            
+                            // Show preview
+                            let previewContainer = e.target.nextElementSibling;
+                            if (!previewContainer || !previewContainer.classList.contains('image-upload-container')) {
+                                previewContainer = document.createElement('div');
+                                previewContainer.className = 'image-upload-container';
+                                e.target.parentNode.appendChild(previewContainer);
+                            }
+                            
+                            // Clear previous preview
+                            previewContainer.innerHTML = '';
+                            
+                            // Create new preview image
+                            const preview = document.createElement('img');
+                            preview.className = 'preview-image';
+                            preview.src = event.target.result;
+                            previewContainer.appendChild(preview);
+                            
+                            // Create save button
+                            const saveBtn = document.createElement('button');
+                            saveBtn.type = 'button';
+                            saveBtn.className = 'btn btn-secondary save-image-btn';
+                            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Image';
+                            saveBtn.setAttribute('data-type', type);
+                            saveBtn.setAttribute('data-index', index);
+                            
+                            const actionsDiv = document.createElement('div');
+                            actionsDiv.className = 'image-actions';
+                            actionsDiv.appendChild(saveBtn);
+                            previewContainer.appendChild(actionsDiv);
+                            
+                            // Enable the save button
+                            saveBtn.addEventListener('click', function() {
+                                if (uploadedImages[type][index]) {
+                                    showToast('Image saved successfully!');
+                                } else {
+                                    showToast('No image to save', true);
+                                }
+                            });
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+            // Remove items
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-item')) {
+                    const type = e.target.dataset.type;
+                    const index = e.target.dataset.index;
+                    const container = document.getElementById(`edit-${type}`);
+                    const item = container.querySelector(`.edit-item[data-index="${index}"]`);
+                    
+                    if (item && confirm(`Are you sure you want to remove this ${type} item?`)) {
+                        item.remove();
+                        // Renumber remaining items
+                        const items = container.querySelectorAll('.edit-item');
+                        items.forEach((item, i) => {
+                            item.dataset.index = i;
+                            const title = item.querySelector('h3');
+                            if (title) {
+                                title.innerHTML = `${type.charAt(0).toUpperCase() + type.slice(1)} ${i + 1} ` + 
+                                    `<button class="btn btn-danger remove-item" data-type="${type}" data-index="${i}">Remove</button>`;
+                            }
+                        });
+                    }
+                }
+            });
+
+            // Update resume
+            document.getElementById('update-resume').addEventListener('click', function() {
+                const fileInput = document.getElementById('resume-upload');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    showToast('Please select a PDF file first', true);
+                    return;
+                }
+                
+                if (file.type !== 'application/pdf') {
+                    showToast('Only PDF files are allowed', true);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('portfolioResume', e.target.result);
+                    document.getElementById('current-resume').textContent = file.name;
+                    showToast('Resume updated successfully!');
+                    
+                    // Notify the main page
+                    if (window.opener) {
+                        window.opener.postMessage({
+                            type: 'RESUME_UPDATE',
+                            fileName: file.name
+                        }, '*');
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Save all changes
+            document.getElementById('save-changes').addEventListener('click', saveChanges);
+
+            // Reset changes
+            document.getElementById('reset-changes').addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all changes to default?')) {
+                    localStorage.removeItem('portfolioData');
+                    loadDataForEditing();
+                    showToast('Reset to default values');
+                }
+            });
+        }
+
+        function saveChanges() {
+            // Collect personal info
+            const personalInfo = {
+                name: document.getElementById('edit-name').value,
+                title: document.getElementById('edit-title').value,
+                description: document.getElementById('edit-description').value,
+                email: document.getElementById('edit-email').value,
+                phone: document.getElementById('edit-phone').value,
+                location: document.getElementById('edit-location').value,
+                degree: document.getElementById('edit-degree').value
+            };
+
+            // Collect projects
+            const projects = [];
+            document.querySelectorAll('#edit-projects .edit-item').forEach(item => {
+                const index = item.getAttribute('data-index');
+                projects.push({
+                    title: item.querySelector('[data-field="title"]').value,
+                    description: item.querySelector('[data-field="description"]').value,
+                    shortDescription: item.querySelector('[data-field="shortDescription"]').value,
+                    image: uploadedImages.projects[index] || 
+                        item.querySelector('.preview-image')?.src || '',
+                    links: {
+                        demo: item.querySelector('[data-field="demo"]').value,
+                        code: item.querySelector('[data-field="code"]').value
+                    },
+                    tags: item.querySelector('[data-field="tags"]').value.split(',').map(tag => tag.trim()).filter(tag => tag)
+                });
+            });
+
+            // Collect experience
+            const experience = [];
+            document.querySelectorAll('#edit-experience .edit-item').forEach(item => {
+                const index = item.getAttribute('data-index');
+                const logoUrl = uploadedImages.experience[index] || 
+                            item.querySelector('.preview-image')?.src || '';
+
+                experience.push({
+                    position: item.querySelector('[data-field="position"]').value,
+                    company: item.querySelector('[data-field="company"]').value,
+                    logo: logoUrl,
+                    date: item.querySelector('[data-field="date"]').value,
+                    description: item.querySelector('[data-field="description"]').value
+                });
+            });
+
+            // Collect education
+            const education = [];
+            document.querySelectorAll('#edit-education .edit-item').forEach(item => {
+                const index = item.getAttribute('data-index');
+                const logoUrl = uploadedImages.education[index] || 
+                            item.querySelector('.preview-image')?.src || '';
+
+                education.push({
+                    degree: item.querySelector('[data-field="degree"]').value,
+                    institution: item.querySelector('[data-field="institution"]').value,
+                    logo: logoUrl,
+                    date: item.querySelector('[data-field="date"]').value,
+                    description: item.querySelector('[data-field="description"]').value,
+                    grade: item.querySelector('[data-field="grade"]').value || ''
+                });
+            });
+
+            // Combine all data
+            const portfolioData = {
+                personalInfo,
+                projects,
+                experience,
+                education
+            };
+
+            // Save to localStorage
+            localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
+
+            // Clear temporary image storage
+            Object.keys(uploadedImages).forEach(type => {
+                uploadedImages[type] = {};
+            });
+
+            // Notify main page
+            if (window.opener) {
+                window.opener.postMessage({
+                    type: 'PORTFOLIO_UPDATE',
+                    data: portfolioData
+                }, '*');
+            } else {
+                // If opened in new tab, use localStorage
+                localStorage.setItem('shouldReload', 'true');
+            }
+
+            showToast('All changes saved successfully!');
+        }
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'shouldReload') {
+                location.reload();
+            }
+        });
+
+        window.addEventListener('message', function(e) {
+            if (e.data.type === 'PORTFOLIO_UPDATE') {
+                // Update the page with new data
+                if (typeof updatePortfolio === 'function') {
+                    updatePortfolio(e.data.data);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
